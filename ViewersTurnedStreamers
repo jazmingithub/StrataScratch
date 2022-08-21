@@ -1,0 +1,33 @@
+From users who had their first session as a viewer, how many streamer sessions have they had? 
+Return the user id and number of sessions in descending order. 
+In case there are users with the same number of sessions, order them by ascending user id.
+
+select * from twitch_sessions;
+
+select *
+from twitch_sessions
+where user_id = '0'
+order by session_start;
+
+
+
+-- identify whcih users had their first session as a viewer 
+  -- order sessions based on date 
+ SELECT user_id, 
+        session_type, 
+        rank() OVER (PARTITION BY user_id ORDER BY session_start) streams_order
+FROM twitch_sessions
+ 
+  -- use a subquier to select users that were viewers in stream_order
+SELECT user_id
+FROM (
+     SELECT user_id, 
+        session_type, 
+        rank() OVER (PARTITION BY user_id ORDER BY session_start) streams_order
+     FROM twitch_sessions)
+WHERE streams_order = 1 
+    AND session type = 'viewer'
+
+-- there 4 differnt RANK functinos are ROW_NUMBER(), RANK(), DENSE_RANK(), NTILE()
+-- the OVER() claused is used to define a set of rows in the results 
+-- the PARTITION BY clause defines the subset of data in a partition
