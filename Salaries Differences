@@ -1,0 +1,19 @@
+
+SELECT 
+ABS((
+(SELECT 
+    MAX(salary)
+FROM db_employee AS E 
+JOIN db_dept as D
+    ON E.department_id = D.id
+WHERE d.department IN ('engineering')
+GROUP BY d.department)
+-
+(SELECT 
+    MAX(salary)
+FROM db_employee AS E 
+JOIN db_dept as D
+    ON E.department_id = D.id
+WHERE d.department IN ('marketing')
+GROUP BY d.department)
+)) AS salary_difference
