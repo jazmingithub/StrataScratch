@@ -1,0 +1,21 @@
+select * from twitter_employee;
+
+--top 3 salaries from each department
+SELECT 
+    b.department, 
+    b.salary
+FROM     
+     (SELECT 
+        salary, 
+        department,
+        RANK() OVER (PARTITION BY a.department
+                        ORDER BY a.salary DESC) as salary_rank
+     FROM  
+        (SELECT DISTINCT 
+            department, 
+            salary
+        FROM twitter_employee) as a 
+    ORDER BY 
+        department, salary_rank) as b
+WHERE b.salary_rank < 4
+
