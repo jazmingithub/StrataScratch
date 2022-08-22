@@ -1,0 +1,18 @@
+select * from fraud_score;
+-- 5 percentile by each state 
+  
+SELECT 
+        policy_num,
+        state,
+        claim_cost,
+        fraud_score
+FROM  
+    (SELECT
+        policy_num,
+        state,
+        claim_cost,
+        fraud_score,
+        NTILE(100) OVER (PARTITION BY state
+                            ORDER BY fraud_score DESC) as percentile
+    FROM fraud_score) as a 
+WHERE percentile <= 5
