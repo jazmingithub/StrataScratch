@@ -1,0 +1,23 @@
+select * from airbnb_search_details;
+
+SELECT
+    year, 
+    current_year_host,
+    prev_year_host,
+    round(((current_year_host - prev_year_host)/(cast(prev_year_host as numeric)))*100) estimated_growth
+FROM
+-- get hosts for previous year 
+    (SELECT 
+        year, 
+        current_year_host,
+        LAG(current_year_host, 1) OVER (ORDER BY year) as prev_year_host
+    FROM
+    -- count host_since for current year
+       (SELECT 
+            extract(year FROM host_since:: date) as year,
+            count(id) current_year_host
+        FROM airbnb_search_details
+        WHERE host_since IS NOT NULL
+        GROUP BY year
+        ORDER BY year) as a 
+        ) as b
