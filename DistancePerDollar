@@ -1,0 +1,24 @@
+select * from uber_request_logs;
+--Distance-per-dollar = distance traveled/cost of ride
+-- For each date, distance/cost -  avg(distance/cost for month)
+
+SELECT DISTINCT 
+    b.request_month, 
+    round(abs(b.dist_to_cost - avg_dist_to_cost):: DECIMAL,2) as mean_deviation
+FROM 
+    (SELECT 
+        a.request_month,
+        a.dist_to_cost, 
+        AVG(a.dist_to_cost) OVER(PARTITION BY a.request_month) as avg_dist_to_cost
+    FROM
+        (SELECT 
+            request_date,
+            to_char(request_date::date, 'YYYY-MM') as request_month,
+            (distance_to_travel/monetary_cost) as dist_to_cost
+        FROM uber_request_logs) as a
+    ORDER BY request_date) as b 
+GROUP BY 
+    b.request_month,
+    b.dist_to_cost,
+    b.avg_dist_to_cost
+ORDER BY b.request_month
