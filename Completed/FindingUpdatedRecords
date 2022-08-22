@@ -1,0 +1,9 @@
+SELECT 
+    id, 
+    first_name,
+    last_name,
+    department_id,
+    MAX(salary) AS Max 
+FROM ms_employee_salary as e
+GROUP BY e.id, e.first_name, e.last_name, e.department_id
+ORDER BY id
