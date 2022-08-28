@@ -1,0 +1,9 @@
+select * from olympics_athletes_events;
+
+SELECT *,
+CASE 
+    WHEN city IN ('Berlin', 'Athina', 'Lillehammer', 'London', 'Paris', 'Albertville')
+    THEN 'European' 
+    ELSE 'NonEuropean' 
+    END as city_classification
+FROM olympics_athletes_events
