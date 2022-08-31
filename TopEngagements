@@ -1,0 +1,15 @@
+select * from fb_search_events;
+
+
+
+
+-- step 1: join tables 
+SELECT
+-- step 2: find search_results_position is 3 or less and clicked = 1
+-- step 3: count top 3 and find percentage
+    (COUNT(CASE 
+        WHEN search_results_position <= 3 AND clicked = 1 THEN 1
+        ELSE NULL END)::FLOAT/COUNT(*))*100 as percentage
+FROM fb_search_events as E
+    LEFT JOIN fb_search_results as R
+    ON e.search_id = r.search_id
