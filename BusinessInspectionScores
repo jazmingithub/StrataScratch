@@ -1,0 +1,20 @@
+select * from sf_restaurant_health_violations;
+SELECT 
+    a.business_type,
+    a.inspection_type,
+    AVG(inspection_score) as avg_inspection_score
+FROM 
+(SELECT 
+    inspection_type, 
+    inspection_score,
+    business_name,
+    CASE 
+        WHEN business_name ILIKE '%restaurant%' THEN 'Restaurant'
+        WHEN business_name ILIKE '%cafe%' THEN 'Cafe'
+        WHEN business_name ILIKE '%taqueria%' THEN 'Taqueria'
+        WHEN business_name ILIKE '%kitchen%' THEN 'Kitchen'
+        WHEN business_name ILIKE '%garden%' THEN 'Garden'
+        WHEN business_name ILIKE '%school%' THEN 'School'
+        ELSE 'Other' END as business_type
+FROM sf_restaurant_health_violations) as a 
+GROUP BY 1,2
