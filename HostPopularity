@@ -1,0 +1,22 @@
+select * from airbnb_host_searches;
+
+SELECT 
+    a.host_pop_rating, 
+    MIN(a.price) as min_price, 
+    AVG(a.price) as avg_price, 
+    MAX(a.price) as max_price
+FROM 
+    (SELECT
+        CONCAT(price, room_type, host_since, zipcode, number_of_reviews) as host_id,
+            number_of_reviews, 
+            price,
+            CASE 
+                WHEN number_of_reviews = 0 THEN 'NEW'
+                WHEN number_of_reviews BETWEEN 1 AND 5 THEN 'Rising'
+                WHEN number_of_reviews BETWEEN 6 AND 15 THEN 'Trending Up'
+                WHEN number_of_reviews BETWEEN 16 AND 40 THEN 'Popular'
+                WHEN number_of_reviews > 40 THEN 'Hot'
+                END as host_pop_rating
+    FROM airbnb_host_searches
+    GROUP BY 1, 2, 3) as a 
+GROUP BY 1
