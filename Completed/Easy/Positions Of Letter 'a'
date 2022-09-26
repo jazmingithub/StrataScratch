@@ -1,0 +1,9 @@
+/* 
+Find the position of the letter 'a' in the first name of the worker 'Amitah'. 
+https://platform.stratascratch.com/coding/9829-positions-of-letter-a?code_type=1
+*/ 
+
+select 
+    STRPOS(first_name, 'a') as position_of_letter_a 
+from worker
+where first_name = 'Amitah'
