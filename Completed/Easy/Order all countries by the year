@@ -1,0 +1,13 @@
+Order all countries by the year they first participated in the Olympics
+
+Order all countries by the year they first participated in the Olympics.
+Output the National Olympics Committee (NOC) name along with the desired year.
+Sort records by the year and the NOC in ascending order.
+
+
+select distinct
+    noc,
+    MIN(year) over(partition by noc) as first_time_year
+from olympics_athletes_events
+group by noc, year
+order by first_time_year
