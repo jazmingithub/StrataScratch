@@ -1,0 +1,21 @@
+Find the gender that has made the most number of doctor appointments.
+Output the gender along with the corresponding number of appointments.
+
+
+
+select 
+    gender,
+    count(appointmentid) as n_appointments
+from medical_appointments
+group by gender
+having count(appointmentid) =
+-- Subquery in the having clasue to select Max number of appointments 
+-- below was my inital response but only returned the max number 
+-- but the question also required to display the gender 
+    (select Max(n_appointments) FROM  
+    (select 
+        gender,
+        count(appointmentid) as n_appointments
+    from medical_appointments
+    group by gender
+    ) as a )
