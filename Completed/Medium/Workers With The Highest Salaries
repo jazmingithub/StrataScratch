@@ -1,0 +1,23 @@
+
+
+Find the titles of workers that earn the highest salary. 
+Output the highest-paid title or multiple titles that share the highest salary.
+
+SELECT 
+    worker_title as best_paid_title
+FROM 
+-- Inner query finds the highest paying employee 
+-- DENSE_RANK returns the rank of each row within a result set partition, with no gaps in the ranking values
+-- example. if there are multiple # 1's 
+    (SELECT 
+        worker_id,
+        salary,
+        department, 
+        CONCAT(first_name, ' ', last_name) AS name,
+        DENSE_RANK() OVER(
+            ORDER BY salary DESC) salary_rank
+    FROM worker) employee_salary_rank
+JOIN title
+   ON worker_id = worker_ref_id
+WHERE salary_rank = 1
+Order by worker_title
