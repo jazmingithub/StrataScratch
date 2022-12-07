@@ -1,0 +1,35 @@
+
+
+Find the 3 most profitable companies in the entire world.
+Output the result along with the corresponding company name.
+Sort the result based on profits in descending order.
+
+-- This one was a head-scratcher scince the approached tip 
+-- said to use the RANK() function but I was getting the 
+-- incorrect order of profits with the query below 
+-- the inner query displayed the correct rank but once 
+-- i included the where clause it showed the incorrect rank 
+
+select 
+    company,
+    profits
+from 
+    (select 
+        company,
+        profits,
+        Rank() Over
+            (Order By profits DESC) as Rank
+    from forbes_global_2010_2014
+    where rank > 4) as a 
+order by profits DESC 
+
+
+
+-- this querry works because there are no duplicates 
+
+select 
+    company, 
+    profits 
+from forbes_global_2010_2014  
+order by profits desc 
+limit 3
